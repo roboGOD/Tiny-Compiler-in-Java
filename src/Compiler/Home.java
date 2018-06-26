@@ -5,10 +5,7 @@
  */
 package Compiler;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -23,7 +20,7 @@ public class Home extends javax.swing.JFrame {
      */
     public Home() {
         initComponents();
-        this.initialize();
+        this.initialize(); // Custom Initialization. See the function.
     }
 
     /**
@@ -111,18 +108,18 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        JFileChooser jf = new JFileChooser();
-        jf.setAcceptAllFileFilterUsed(false);
-        jf.setApproveButtonText("Select");
-        jf.setMultiSelectionEnabled(false);
-        FileFilter filter = new FileNameExtensionFilter(".tiny File", "tiny");
-        jf.setFileFilter(filter);
-        int result = jf.showOpenDialog(this);
+        // Choosing a file using JFileChooser
+        JFileChooser jf = new JFileChooser(); // Initialize It
+        jf.setAcceptAllFileFilterUsed(false); // Set it to "do not accept all files"
+        jf.setApproveButtonText("Select"); // Button Text
+        jf.setMultiSelectionEnabled(false); // Selecting only a single file
+        FileFilter filter = new FileNameExtensionFilter(".tiny File", "tiny"); // Specify types of files to accept
+        jf.setFileFilter(filter); // Set the created Filter
+        int result = jf.showOpenDialog(this); // Store the result of JFileChooser CANCEL or APPROVE
         if(result == JFileChooser.APPROVE_OPTION) {
-            File f  = jf.getSelectedFile();
-            String gpath = f.getPath().replace("\\", "\\\\");
-                jTextField1.setText(gpath);
+            File f  = jf.getSelectedFile(); // Get the selected File
+            String gpath = f.getPath().replace("\\", "\\\\"); // We only need the path of the File
+            jTextField1.setText(gpath);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -131,16 +128,19 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        Lexer L = new Lexer(jTextField1.getText());
+        // Print the Tokens from the File
+        jTextArea1.setText("");
+        Lexer L = new Lexer(jTextField1.getText()); // Create a new object with specified file path
         ArrayList<Token> Tokens;
-        Tokens = L.generateTokens();
+        Tokens = L.generateTokens(); // Call generateTokens
         for(Token T: Tokens){
+            // Print the Tokens in the Text Area
             jTextArea1.setText(jTextArea1.getText() + T.tokenID + "\t" + T.instance + "\t" + T.lineNum + "\t" + T.tokenType + "\n");
         }
     }//GEN-LAST:event_jButton2ActionPerformed
     
     private void initialize() {
+        // I created a simple interface without IDE and I didn't want to erase it
         /*JTextField T1;
         JLabel L1;
         JButton B1;
@@ -160,7 +160,11 @@ public class Home extends javax.swing.JFrame {
         this.setVisible(true);
         this.setTitle("Compiler for Tiny");
         this.setLocationRelativeTo(null);
+        // The following line of code is really cool. You can include files in project and specify the path
+        // this way and it will work in any computer. In other words, file path becomes relative
+        // But the file must be present in src directory
         String temp = String.valueOf(getClass().getResource("/RequiredFiles/Code.tiny"));
+        // Doing some fomatting for the file path to be correct
         temp = temp.substring(5,temp.length());
         temp = temp.replaceAll("%20", " ");
         jTextField1.setText(temp);
